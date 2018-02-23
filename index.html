@@ -166,8 +166,11 @@
     }
 
     .file-size {
-      color: #bbbbbb;
-      padding-left: .5em
+      opacity: 0.3;
+    }
+
+    .file-name .file-size {
+      display: none;
     }
 
     .container {
@@ -199,11 +202,11 @@
       <div class="file-preview" id="preview">__PREVIEW__</div>
 
       <h1 class="file-name">
-        <a href="__PATH__">__FILENAME__</a>
+        <a href="__PATH__">__FILENAME__<span class="file-size"> · __FILESIZE__</span></a>
       </h1>
 
       <div class="file-download">
-        <a href="__PATH__">Download <span class="file-size">__FILESIZE__</span></a>
+        <a href="__PATH__">Download<span class="file-size">  ·  __FILESIZE__</span></a>
       </div>
 
   </div>
