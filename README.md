@@ -5,7 +5,9 @@ An unobtrusive landing page template for the Mac filesharing app [Dropshare](htt
 ## Features
 
 * Minimal design
+* Dark/light mode
 * Embedded media previews (images, videos, text files/notes)
+* Syntax highlighting for common code files
 * Generic file icon for all other file types
 
 ## Screenshots
