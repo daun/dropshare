@@ -1,13 +1,5 @@
 import { createElement, FileCode, FileDown, FileText, FileType, PackageOpen } from 'lucide'
 
-const previewTypes = [
-  "com.compuserve.gif",
-  "public.plain-text",
-  "public.png",
-  "public.jpeg",
-  "public.svg-image",
-]
-
 const videoTypes = [
   "public.movie",
   "public.video",
@@ -50,12 +42,12 @@ function createIcon(icon) {
 }
 
 function updatePreview() {
-  const preview = document.getElementById("preview")
+  const preview = document.querySelector("#preview")
   const fileType = document.body.getAttribute("data-file-type")
-  const hasPreview = previewTypes.indexOf(fileType) >= 0 || videoTypes.indexOf(fileType) >= 0
+  const hasPreview = !!preview.querySelector('img, video, iframe')
   const isVideoFile = videoTypes.indexOf(fileType) >= 0
 
-  if (isVideoFile) {
+  if (!hasPreview && isVideoFile) {
     preview.innerHTML = '<video controls src="__PREVIEWURL__"></video>'
     return
   }

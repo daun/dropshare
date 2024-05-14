@@ -13,15 +13,6 @@ iframe {
   @apply w-full h-full;
 }
 
-.fa {
-  font-size: 80px;
-}
-
-.file-preview .icon {
-  @apply block mx-auto w-24 h-24;
-  stroke-width: 1;
-}
-
 .file-preview img,
 .file-preview video {
   @apply w-auto h-auto mx-auto rounded-md;
@@ -42,4 +33,9 @@ iframe {
 
 .file-preview iframe[src$='.txt'] {
   @apply p-8;
+}
+
+.file-preview .icon {
+  @apply block mx-auto w-24 h-24;
+  stroke-width: 1;
 }
