@@ -1,13 +1,23 @@
 import { defineConfig } from "vite"
-import { viteSingleFile } from "vite-plugin-singlefile"
+import { ViteMinifyPlugin as minifyHtml } from "vite-plugin-minify"
+import { viteSingleFile as inlineAssets } from "vite-plugin-singlefile"
 
 export default defineConfig({
   plugins: [
-    viteSingleFile({ removeViteModuleLoader: true })
+    inlineAssets({ removeViteModuleLoader: true }),
+    minifyHtml({}),
   ],
-  root: 'src',
+  root: "src",
   build: {
-    outDir: '../',
-    emptyOutDir: false
+    outDir: "../",
+    emptyOutDir: false,
+    terserOptions: {
+      format: {
+        comments: false
+      }
+    }
+  },
+  esbuild: {
+    legalComments: "none"
   }
 })
