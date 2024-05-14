@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: -apple-system, system-ui, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Icons', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  letter-spacing: .015em;
+}
+
+img,
+object,
+iframe {
+  @apply w-full h-full;
+}
+
+.fa {
+  font-size: 80px;
+}
+
+.file-preview .icon {
+  @apply block mx-auto w-24 h-24;
+  stroke-width: 1;
+}
+
+.file-preview img,
+.file-preview video {
+  @apply w-auto h-auto mx-auto rounded-md;
+  min-width: 10vw;
+  min-height: 10vh;
+  max-width: 80vw;
+  max-height: 60vh;
+}
+
+.file-preview img {
+  @apply transition-transform hover:scale-105;
+}
+
+.file-preview iframe {
+  @apply w-full max-w-5xl bg-white border-none rounded-md;
+  height: 60vh;
+}
+
+.file-preview iframe[src$='.txt'] {
+  @apply p-8;
+}
