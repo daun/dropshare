@@ -1,4 +1,4 @@
-import { createElement, FileCode, FileDown, FileText, FileType, PackageOpen } from 'lucide'
+import { createElement, FileCode, FileDown, FileText, PackageOpen } from 'lucide'
 
 const videoTypes = [
   "public.movie",
@@ -16,6 +16,17 @@ const codeTypes = [
   "net.daringfireball.markdown"
 ]
 
+const codeLanguages = {
+  "public.plain-text": "plaintext",
+  "net.daringfireball.markdown": "markdown",
+  "public.html": "html",
+  "public.css": "css",
+  "public.javascript-source": "javascript",
+  "com.netscape.javascript-source": "javascript",
+  "public.mpeg-2-transport-stream": "typescript",
+  "public.php-script": "php",
+}
+
 const icons = {
   "public.plain-text": FileText,
   "public.rtf": FileText,
@@ -25,6 +36,8 @@ const icons = {
   "public.css": FileCode,
   "public.javascript-source": FileCode,
   "com.netscape.javascript-source": FileCode,
+  "public.mpeg-2-transport-stream": FileCode, // *.ts
+  "public.php-script": FileCode,
 
   "public.zip-archive": PackageOpen,
 }
@@ -41,20 +54,42 @@ function createIcon(icon) {
   return el
 }
 
-function updatePreview() {
+function createVideo(url) {
+  const video = document.createElement("video")
+  video.controls = true
+  video.src = url
+  return video
+}
+
+function getCodeLanguage(type) {
+  return codeLanguages[type] || "plaintext"
+}
+
+async function updatePreview() {
   const preview = document.querySelector("#preview")
+
   const fileType = document.body.getAttribute("data-file-type")
+  const filePath = document.body.getAttribute("data-file-path")
+
   const hasPreview = !!preview.querySelector('img, video, iframe')
   const isVideoFile = videoTypes.indexOf(fileType) >= 0
+  const isCodeFile = codeTypes.indexOf(fileType) >= 0
 
-  if (!hasPreview && isVideoFile) {
-    preview.innerHTML = '<video controls src="__PREVIEWURL__"></video>'
-    return
-  }
+  if (hasPreview && !isCodeFile) return
 
-  if (!hasPreview) {
+  preview.innerHTML = ""
+
+  if (isCodeFile) {
+    const { createCodeBlock, highlightCodeBlocks } = await import("./code.js")
+    const language = getCodeLanguage(fileType)
+    const codeBlock = await createCodeBlock(filePath, language)
+    preview.appendChild(codeBlock)
+    highlightCodeBlocks()
+  } else if (isVideoFile) {
+    const video = createVideo(filePath)
+    preview.appendChild(video)
+  } else {
     const icon = createIcon(getIconForType(fileType))
-    preview.innerHTML = ""
     preview.appendChild(icon)
   }
 }

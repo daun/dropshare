@@ -20,6 +20,7 @@
     "vite-plugin-singlefile": "^2.0.1"
   },
   "dependencies": {
+    "highlight.js": "^11.9.0",
     "lucide": "^0.378.0"
   }
 }

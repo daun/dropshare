@@ -31,8 +31,27 @@ iframe {
   height: 60vh;
 }
 
+.file-preview pre {
+  @apply w-full max-w-5xl bg-white dark:bg-gray-900 p-0 overflow-auto rounded-md text-sm text-left;
+  height: 60vh;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.file-preview pre::-webkit-scrollbar {
+  display: none;
+}
+
+.file-preview pre code {
+  @apply block !p-4;
+}
+
 .file-preview iframe[src$='.txt'] {
-  @apply p-8;
+  @apply p-6;
+}
+
+.file-preview .hljs {
+  @apply !bg-transparent;
 }
 
 .file-preview .icon {
