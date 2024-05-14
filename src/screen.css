@@ -46,6 +46,11 @@ iframe {
   @apply block !p-4;
 }
 
+.file-preview pre code.language-plaintext,
+.file-preview pre code.language-markdown {
+  @apply whitespace-pre-wrap;
+}
+
 .file-preview iframe[src$='.txt'] {
   @apply p-6;
 }
