@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: -apple-system, system-ui, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Icons', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  letter-spacing: .015em;
+}
+
+img,
+object,
+iframe {
+  @apply w-full h-full;
+}
+
+.file-preview img,
+.file-preview video {
+  @apply w-auto h-auto mx-auto rounded-md;
+  min-width: 10vw;
+  min-height: 10vh;
+  max-width: 80vw;
+  max-height: 60vh;
+}
+
+.file-preview img {
+  @apply transition-transform hover:scale-105;
+}
+
+.file-preview iframe {
+  @apply w-full max-w-5xl bg-white border-none rounded-md;
+  height: 60vh;
+}
+
+.file-preview pre {
+  @apply w-full max-w-5xl bg-white dark:bg-gray-900 p-0 overflow-auto rounded-md text-sm text-left;
+  height: 60vh;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.file-preview pre::-webkit-scrollbar {
+  display: none;
+}
+
+.file-preview pre code {
+  @apply block !p-4;
+}
+
+.file-preview pre code.language-plaintext,
+.file-preview pre code.language-markdown {
+  @apply whitespace-pre-wrap;
+}
+
+.file-preview iframe[src$='.txt'] {
+  @apply p-6;
+}
+
+.file-preview .hljs {
+  @apply !bg-transparent;
+}
+
+.file-preview .icon {
+  @apply block mx-auto w-24 h-24;
+  stroke-width: 1;
+}
