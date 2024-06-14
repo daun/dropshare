@@ -34,13 +34,19 @@ iframe {
 .file-preview pre {
   @apply w-full max-w-5xl bg-white dark:bg-gray-900 p-0 overflow-auto rounded-md text-sm text-left;
   height: 60vh;
+  display: flex;
   margin-left: auto;
   margin-right: auto;
+}
+
+.file-preview pre,
+.file-preview pre code {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
 
-.file-preview pre::-webkit-scrollbar {
+.file-preview pre::-webkit-scrollbar,
+.file-preview pre code::-webkit-scrollbar {
   display: none;
 }
 
