@@ -1,11 +1,4 @@
-const codeTypes = [
-  "public.plain-text",
-  "public.html",
-  "public.css",
-  "public.javascript-source",
-  "com.netscape.javascript-source",
-  "net.daringfireball.markdown"
-]
+let hljs = null
 
 const codeLanguages = {
   "public.plain-text": "plaintext",
@@ -20,19 +13,29 @@ const codeLanguages = {
 
 const fallbackLanguage = "plaintext"
 
-export function isCodeMimetype(type) {
-  return codeTypes.includes(type)
+const languageImports = {
+  "markdown": () => import("highlight.js/lib/languages/markdown"),
+  "html": () => import("highlight.js/lib/languages/xml"),
+  "css": () => import("highlight.js/lib/languages/css"),
+  "javascript": () => import("highlight.js/lib/languages/javascript"),
+  "typescript": () => import("highlight.js/lib/languages/typescript"),
+  "php": () => import("highlight.js/lib/languages/php"),
 }
 
-function getCodeLanguage(type) {
-  return codeLanguages[type] || type || fallbackLanguage
+export function isCodeMimetype(fileType) {
+  return (fileType in codeLanguages)
+}
+
+function getCodeLanguage(fileType) {
+  return codeLanguages[fileType] || fileType || fallbackLanguage
 }
 
 export async function createCodeBlock(url, fileType = null) {
-  await loadHighlightJs()
-
   const language = getCodeLanguage(fileType)
   const { content } = await loadFile(url)
+
+  await loadHighlightJs()
+  await loadHighlightJsLanguage(language)
 
   const text = document.createTextNode(content)
   const code = document.createElement("code")
@@ -50,24 +53,15 @@ export function highlightCodeBlocks() {
 }
 
 async function loadHighlightJs() {
-  const loading = Promise.all([
-    import("highlight.js"),
-    import("highlight.js/lib/languages/markdown"),
-    import("highlight.js/lib/languages/xml"),
-    import("highlight.js/lib/languages/css"),
-    import("highlight.js/lib/languages/javascript"),
-    import("highlight.js/lib/languages/typescript"),
-    import("highlight.js/lib/languages/php"),
-  ])
+  ({ default: hljs} = await import("highlight.js"))
+}
 
-  ;([hljs, markdown, xml, css, javascript, typescript, php] = await loading)
+async function loadHighlightJsLanguage(language) {
+  const importFn = languageImports[language]
+  if (!importFn) return
 
-  hljs.registerLanguage("markdown", markdown)
-  hljs.registerLanguage("html", xml)
-  hljs.registerLanguage("css", css)
-  hljs.registerLanguage("javascript", javascript)
-  hljs.registerLanguage("typescript", typescript)
-  hljs.registerLanguage("php", php)
+  const { default: languageMode } = await importFn()
+  hljs.registerLanguage(language, languageMode)
 }
 
 async function loadFile(url) {
