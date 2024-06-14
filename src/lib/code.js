@@ -1,18 +1,3 @@
-import hljs from 'highlight.js/lib/core'
-import markdown from 'highlight.js/lib/languages/markdown'
-import xml from 'highlight.js/lib/languages/xml'
-import css from 'highlight.js/lib/languages/css'
-import javascript from 'highlight.js/lib/languages/javascript'
-import typescript from 'highlight.js/lib/languages/typescript'
-import php from 'highlight.js/lib/languages/php'
-
-hljs.registerLanguage("markdown", markdown)
-hljs.registerLanguage("html", xml)
-hljs.registerLanguage("css", css)
-hljs.registerLanguage("javascript", javascript)
-hljs.registerLanguage("typescript", typescript)
-hljs.registerLanguage("php", php)
-
 const codeTypes = [
   "public.plain-text",
   "public.html",
@@ -43,18 +28,9 @@ function getCodeLanguage(type) {
   return codeLanguages[type] || type || fallbackLanguage
 }
 
-// async function loadHighlightJs() {
-//   await Promise.all([
-//     import("highlight.js/lib/languages/markdown"),
-//     import("highlight.js/lib/languages/xml"),
-//     import("highlight.js/lib/languages/css"),
-//     import("highlight.js/lib/languages/javascript"),
-//     import("highlight.js/lib/languages/typescript"),
-//     import("highlight.js/lib/languages/php"),
-//   ])
-// }
-
 export async function createCodeBlock(url, fileType = null) {
+  await loadHighlightJs()
+
   const language = getCodeLanguage(fileType)
   const { content } = await loadFile(url)
 
@@ -70,7 +46,28 @@ export async function createCodeBlock(url, fileType = null) {
 }
 
 export function highlightCodeBlocks() {
-  hljs.highlightAll()
+  hljs?.highlightAll()
+}
+
+async function loadHighlightJs() {
+  const loading = Promise.all([
+    import("highlight.js"),
+    import("highlight.js/lib/languages/markdown"),
+    import("highlight.js/lib/languages/xml"),
+    import("highlight.js/lib/languages/css"),
+    import("highlight.js/lib/languages/javascript"),
+    import("highlight.js/lib/languages/typescript"),
+    import("highlight.js/lib/languages/php"),
+  ])
+
+  ;([hljs, markdown, xml, css, javascript, typescript, php] = await loading)
+
+  hljs.registerLanguage("markdown", markdown)
+  hljs.registerLanguage("html", xml)
+  hljs.registerLanguage("css", css)
+  hljs.registerLanguage("javascript", javascript)
+  hljs.registerLanguage("typescript", typescript)
+  hljs.registerLanguage("php", php)
 }
 
 async function loadFile(url) {
