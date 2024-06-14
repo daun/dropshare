@@ -15,10 +15,8 @@ hljs.registerLanguage("php", php)
 
 export async function createCodeBlock(url, language = "plaintext") {
   const { content } = await loadFile(url)
-
-  const text = document.createTextNode(content)
   const code = document.createElement("code")
-  code.appendChild(text)
+  code.innerText = content
   code.classList.add(`language-${language}`)
 
   const pre = document.createElement("pre")

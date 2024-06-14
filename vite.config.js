@@ -4,8 +4,8 @@ import { viteSingleFile as inlineAssets } from "vite-plugin-singlefile"
 
 export default defineConfig({
   plugins: [
-    inlineAssets({ removeViteModuleLoader: true }),
-    minifyHtml({}),
+    inlineAssets(),
+    minifyHtml(),
   ],
   root: "src",
   build: {
@@ -14,6 +14,14 @@ export default defineConfig({
     terserOptions: {
       format: {
         comments: false
+      }
+    },
+    rollupOptions: {
+      external: ["shiki"],
+      output: {
+        paths: {
+          "shiki": "https://esm.sh/shiki@1.6.4"
+        }
       }
     }
   },
