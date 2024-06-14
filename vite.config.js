@@ -4,10 +4,8 @@ import { viteSingleFile as inlineAssets } from "vite-plugin-singlefile"
 
 export default defineConfig({
   plugins: [
-    inlineAssets({
-      // inlinePattern: ["*/**/*.js", "*/**/*.css"]
-    }),
-    minifyHtml({}),
+    inlineAssets(),
+    minifyHtml(),
   ],
   root: "src",
   build: {
