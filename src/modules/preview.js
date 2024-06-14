@@ -1,5 +1,5 @@
 import { createIcon } from "./icons.js"
-import { isCodeMimetype, createCodeBlock, highlightCodeBlocks } from "./code.js"
+import { isCodeMimetype, createCodeBlock } from "./code.js"
 import { isVideoMimetype } from "./video.js"
 
 const previewContainer = "#preview"
@@ -23,6 +23,4 @@ export async function updatePreview() {
   } else {
     preview.appendChild(createIcon(fileType))
   }
-
-  highlightCodeBlocks()
 }

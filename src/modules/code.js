@@ -1,7 +1,5 @@
-let hljs = null
-
-const codeLanguages = {
-  "public.plain-text": "plaintext",
+const languages = {
+  "public.plain-text": "text",
   "net.daringfireball.markdown": "markdown",
   "public.html": "html",
   "public.css": "css",
@@ -11,57 +9,56 @@ const codeLanguages = {
   "public.php-script": "php",
 }
 
-const fallbackLanguage = "plaintext"
+const fallbackLanguage = "text"
 
-const languageImports = {
-  "markdown": () => import("highlight.js/lib/languages/markdown"),
-  "html": () => import("highlight.js/lib/languages/xml"),
-  "css": () => import("highlight.js/lib/languages/css"),
-  "javascript": () => import("highlight.js/lib/languages/javascript"),
-  "typescript": () => import("highlight.js/lib/languages/typescript"),
-  "php": () => import("highlight.js/lib/languages/php"),
+const theme = {
+  light: "github-light",
+  dark: "github-dark",
 }
 
 export function isCodeMimetype(fileType) {
-  return (fileType in codeLanguages)
-}
-
-function getCodeLanguage(fileType) {
-  return codeLanguages[fileType] || fileType || fallbackLanguage
+  return (fileType in languages)
 }
 
 export async function createCodeBlock(url, fileType = null) {
-  const language = getCodeLanguage(fileType)
-  const { content } = await loadFile(url)
+  // Create empty placeholder
+  const empty = createEmptyCodeBlock()
 
-  await loadHighlightJs()
-  await loadHighlightJsLanguage(language)
+  loadFile(url).then(({ content }) => {
+    // Load file in the background
+    const plain = createPlainCodeBlock(content)
+    empty.replaceWith(plain)
 
+    // Highlight code in the background
+    createHighlightedCodeBlock(content, getCodeLanguage(fileType)).then((highlighted) => {
+      plain.replaceWith(highlighted)
+    })
+  })
+
+  // Return placeholder
+  return empty
+}
+
+function createEmptyCodeBlock() {
+  return document.createElement("pre")
+}
+
+function createPlainCodeBlock(content) {
   const text = document.createTextNode(content)
   const code = document.createElement("code")
   code.appendChild(text)
-  code.classList.add(`language-${language}`)
-
-  const pre = document.createElement("pre")
-  pre.appendChild(code)
-
-  return pre
+  const placeholder = document.createElement("pre")
+  placeholder.appendChild(code)
+  return placeholder
 }
 
-export function highlightCodeBlocks() {
-  hljs?.highlightAll()
-}
+async function createHighlightedCodeBlock(content, language) {
+  const { codeToHtml } = await import("shiki")
 
-async function loadHighlightJs() {
-  ({ default: hljs} = await import("highlight.js"))
-}
-
-async function loadHighlightJsLanguage(language) {
-  const importFn = languageImports[language]
-  if (!importFn) return
-
-  const { default: languageMode } = await importFn()
-  hljs.registerLanguage(language, languageMode)
+  const html = await codeToHtml(content, { lang: language, themes: theme })
+  const codeBlock = document.createRange().createContextualFragment(html).querySelector("pre")
+  codeBlock.classList.add(`language-${language}`)
+  return codeBlock
 }
 
 async function loadFile(url) {
@@ -69,4 +66,8 @@ async function loadFile(url) {
   const content = await response.text()
   const type = response.headers.get("Content-Type")
   return { content, type }
+}
+
+function getCodeLanguage(fileType) {
+  return languages[fileType] || fileType || fallbackLanguage
 }
