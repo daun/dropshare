@@ -34,6 +34,8 @@ iframe {
 .file-preview pre {
   @apply w-full max-w-5xl bg-white dark:bg-gray-900 p-0 overflow-auto rounded-md text-sm text-left;
   height: 60vh;
+  margin-left: auto;
+  margin-right: auto;
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
