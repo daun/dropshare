@@ -1,3 +1,3 @@
-import { updatePreview } from "./lib/preview"
+import { updatePreview } from "./modules/preview"
 
 updatePreview()
